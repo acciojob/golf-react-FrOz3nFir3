@@ -26,18 +26,24 @@ class App extends Component {
 
   // bind ArrowRight keydown event
   componentDidMount() {
-    window.addEventListener("keydown", (event) => {
-      if (event.keyCode == 39) {
-        // move ball by 5 px
-        this.setState((previousState) => ({
-          ballPosition: {
-            left: `${parseInt(previousState.ballPosition.left) + 5}px`,
-          },
-        }));
-      }
-    });
+    window.addEventListener("keydown", this.handleBall, false);
   }
 
+  componentWillUnmount() {
+    // removing listener to prevent memory leak
+    window.removeEventListener("keydown", this.handleBall, false);
+  }
+
+  handleBall = (event) => {
+    if (event.keyCode == 39) {
+      // move ball by 5 px
+      this.setState((previousState) => ({
+        ballPosition: {
+          left: `${parseInt(previousState.ballPosition.left) + 5}px`,
+        },
+      }));
+    }
+  };
   render() {
     return <div className="playground">{this.renderBallOrButton()}</div>;
   }
